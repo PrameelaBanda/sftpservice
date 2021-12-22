@@ -1,0 +1,69 @@
+swagger: "2.0"
+info:
+  description: "This is a sample specification for file sftp service"
+  version: "1.0.0"
+  title: "sftp Service"
+tags:
+  - name: "file"
+basePath: /
+schemes:
+  - https
+  - http
+paths:
+  /api/file/download/{fileName}:
+    parameters:
+      - $ref: '#/parameters/fileName'
+    get:
+      tags:
+        - "file"
+      summary: "Download File from sftp"
+      description: ""
+      operationId: "download"
+      produces:
+        - "MultipartFile"
+      responses:
+        200:
+          schema:
+            $ref: "#/definitions/DownloadFileResponse"
+          description: "Downloads file to the local device"
+  /api/file/upload:
+    post:
+      tags:
+        - "file"
+      summary: "Upload file to the sftp"
+      operationId: "upload"
+      consumes:
+        - "MultipartFile"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "file"
+          description: "File data"
+          required: true
+          schema:
+            $ref: "#/definitions/UploadFileRequest"
+      responses:
+        200:
+          description: "Successfully uploaded the file"
+        500:
+          description: "Internal Server Error"
+definitions:
+  DownloadFileResponse:
+    type: "object"
+    description: Download file
+  UploadFileRequest:
+    type: "object"
+    description: Upload file
+    properties:
+      name:
+        type: object
+parameters:
+  fileName:
+    in: path
+    name: fileName
+    required: true
+    type: string
+    pattern: '[0-9a-z]*'
+    description: File Name
+    x-examples: test.txt
